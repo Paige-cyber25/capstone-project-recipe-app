@@ -3,11 +3,13 @@ const mealList = document.querySelector('.meal');
 const mealDetailsContent = document.querySelector('.meal-details-content');
 const recipeCloseBtn = document.getElementById('recipe-close-btn');
 const searchInputText = document.getElementById('search-input-text');
+const loader = document.querySelector('.loader');
 
 //Get meal Lists that matches with the ingredients
 //.trim() removes whitespace from both ends of a string
 const getMealList = () => {
   let inputResult =  searchInputText.value.trim();
+  loader.style.display = 'block';
     fetch(`https://www.themealdb.com/api/json/v1/1/filter.php?i=${inputResult}`)
     .then(response => response.json())
     .then(data => {
@@ -34,17 +36,27 @@ const getMealList = () => {
        }
        mealList.innerHTML = html;
     })
+    .catch((err) => {
+        return console.log(err);
+    })
+    .finally(data => {
+    loader.style.display = 'none';
+}) 
 }
   searchInputText.value = '';
 //Get Recipe for meals
 const getMealRecipe = (e) => {
+     
     e.preventDefault();
    if(e.target.classList.contains('recipe-btn')) {
     let mealItem = e.target.parentElement.parentElement;
     fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${mealItem.dataset.id}`)
     .then(response => response.json())
     .then(data => mealRecipeModal(data.meals))
+
    }
+   
+  
 }
 
 //Meal recipe Modal
@@ -74,3 +86,5 @@ recipeCloseBtn.addEventListener('click', (meal) => {
     mealDetailsContent.parentElement.classList.remove('showRecipe');
 });
 
+// This is the default UI until a search is made
+window.onload = getMealList("onions");
