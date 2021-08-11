@@ -87,4 +87,4 @@ recipeCloseBtn.addEventListener('click', (meal) => {
 });
 
 // This is the default UI until a search is made
-window.onload = getMealList("onions");
+window.onload = getMealList("egg");
